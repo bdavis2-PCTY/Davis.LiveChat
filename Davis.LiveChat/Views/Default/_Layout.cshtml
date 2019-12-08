@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Live Chat</title>
+</head>
+<body>
+    <input type="hidden" value="@(System.Configuration.ConfigurationManager.AppSettings["URL"])" id="uiAppRoot" />
+
+    <style type="text/css">
+        body {
+            padding: 1em;
+        }
+
+        #uiChatLog {
+            width: 100%;
+            border: 1px solid #000;
+            height: 600px;
+        }
+
+        #uiUserName, #uiChatLog {
+            margin-bottom: 1em;
+        }
+    </style>
+
+    <div id="uiChatLog">
+
+    </div>
+
+    <input type="text" id="uiUserName" placeholder="Your name, Sir..." value="Braydon:)" />
+    <br />
+    <input type="text" id="uiUserMessage" placeholder="Enter your message..." />
+    <input type="button" id="uiSendMessage" value="Send!" />
+
+
+    @Scripts.Render("~/bundles/libJs")
+    @Scripts.Render("~/bundles/webserviceJs")
+    @Scripts.Render("~/bundles/coreJs")
+</body>
+</html>
