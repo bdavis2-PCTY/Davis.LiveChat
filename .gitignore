@@ -338,3 +338,14 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+
+
+
+#Custom Ignores
+**/*.js.map
+Davis.LiveChat/Content/LiveChat.js 
+Davis.LiveChat/Content/Lib/Helpers.js 
+Davis.LiveChat/Content/Lib/jQuery/jQuery.d.js 
+Davis.LiveChat/WebService/*.js 
+Davis.LiveChat/WebService/**/*.js 
