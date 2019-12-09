@@ -7,19 +7,19 @@ namespace Davis.LiveChat.Web.WebService
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
     [System.Web.Script.Services.ScriptService]
-    public class SiteLink : System.Web.Services.WebService
+    public class SiteLink : WebServiceBase
     {
         [WebMethod(true)]
         public void SaveMessage(string pUserDisplayName, string pMessageText)
         {
-            new Davis.LiveChat.Logic.Core.MessageAPI().SaveMessage(pUserDisplayName, pMessageText);
+            new Logic.Core.API.MessageAPI().SaveMessage(pUserDisplayName, pMessageText);
         }
 
         [WebMethod(true)]
         public string GetRecentMessages()
         {
-            var messages = new Logic.Core.MessageAPI().GetRecentMessages();
-            return JsonConvert.SerializeObject(messages);
+            var Messages = new Logic.Core.API.MessageAPI().GetRecentMessages();
+            return base.ResponseHandler(Messages);
         }
     }
 }

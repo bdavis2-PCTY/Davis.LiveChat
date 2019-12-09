@@ -1,6 +1,6 @@
 ﻿namespace LiveChat {
     class MessageManager {
-        private readonly CooldownMs: number = 40000;
+        private readonly cooldownMs: number = 500;
 
         private $uiDisplayNameField: JQuery;
         private $uiMessageField: JQuery;
@@ -8,7 +8,7 @@
         private $uiMessagesContainer: JQuery;
 
         private isSaving: boolean = false;
-
+ 
         public constructor() {
             this.$uiDisplayNameField = $("#uiUserName");
             this.$uiMessageField = $("#uiUserMessage");
@@ -45,8 +45,10 @@
             return this.$uiMessageField.val().trim();
         }
 
+        /**
+         * Refreshes the message log
+         */
         private refreshMessages(): void {
-
             LiveChat.WebService.Site.GetRecentMessagesAsync().then((data: Array<LiveChat.WebService.DTO.Core.IChatMessage>) => {
                 let containerHtml: string = "";
                 for (let i in data) {
@@ -56,12 +58,12 @@
 
                 this.$uiMessagesContainer.html(containerHtml);
 
-                setTimeout(() => this.refreshMessages(), this.CooldownMs);
+                setTimeout(() => this.refreshMessages(), this.cooldownMs);
             });
         }
 
         private buildMessageHtml(pMessage: LiveChat.WebService.DTO.Core.IChatMessage): string {
-            return "<strong>" + pMessage.UserName + ":</strong> " + pMessage.Message + "<br />";
+            return "<strong>[" + pMessage.SentDateTime + "] " + pMessage.UserName + ":</strong> " + pMessage.Message + "<br />";
         }
 
     }
