@@ -3,7 +3,8 @@
         private readonly cooldownMs: number = 500;
 
         private $uiDisplayNameField: JQuery;
-        private $uiMessageField: Quill.Quill;
+        private $uiMessageField: JQuery;
+        private $uiMessageFieldEditor: Quill.Quill;
         private $uiSendMessageBtn: JQuery;
         private $uiMessagesContainer: JQuery;
 
@@ -18,7 +19,7 @@
 
             this.refreshMessages();
 
-            this.$uiMessageField = new Quill('#uiInputEditor', {
+            this.$uiMessageFieldEditor = new Quill('#uiInputEditor', {
                 theme: 'snow',
                 modules:
                 {
@@ -43,6 +44,7 @@
                     ]
                 }
             });
+            this.$uiMessageField = $("#uiInputEditor");
         }
 
         private onSendMessage(): void {
@@ -56,7 +58,7 @@
 
             this.isSaving = true;
             LiveChat.WebService.Site.SaveMessageAsync(display, message).then(() => {
-                this.$uiMessageField.setText("");
+                this.$uiMessageFieldEditor.setText("");
             }).always(() => {
                 this.isSaving = false;
             });
@@ -67,9 +69,10 @@
         }
 
         private getMessageText(): string {
-            console.log(this.$uiMessageField.getContents());
+            let text = this.$uiMessageField.find(".ql-editor").first().html();
+            console.log(text);
 
-            return this.$uiMessageField.getText().trim()
+            return text;
         }
 
         /**
