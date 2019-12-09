@@ -27,9 +27,29 @@
                     } catch (ex) {
                         return reply.d; // Not all web services return JSON, if we are here the reply is probably just a regular string
                     }
-                }).fail(function (reply) {
+                }).fail((reply) => {
                     console.log('error response');
                     console.log(reply);
+
+                    let messageText = reply.responseJSON.Message;
+                    let toastDuration = LiveChat.Helpers.CalculateTextReadTime(messageText) + 2;
+                    toastDuration = Math.min(toastDuration, 15);
+                    toastDuration = Math.max(toastDuration, 2);
+
+                    Swal.fire({
+                        title: 'System Error',
+                        text: messageText,
+                        icon: 'error',
+                        timer: toastDuration * 1000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                        toast: true,
+                        position: 'bottom-end',
+                        onOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
                 });
         }
 

@@ -4,6 +4,8 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Live Chat</title>
+
+    @Styles.Render("~/bundles/libCss")
 </head>
 <body>
     <input type="hidden" value="@(System.Configuration.ConfigurationManager.AppSettings["URL"])" id="uiAppRoot" />
@@ -11,26 +13,37 @@
     <style type="text/css">
         body {
             padding: 1em;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         #uiChatLog {
             width: 100%;
             border: 1px solid #000;
-            height: 600px;
+            height: 500px;
         }
 
         #uiUserName, #uiChatLog {
             margin-bottom: 1em;
         }
+
+        #uiNoMessagesAlert {
+            text-align: center;
+            height: 100%;
+            padding-top: 200px;
+            background-color: #eee;
+        }
     </style>
 
-    <div id="uiChatLog">
+    <strong>Display Name:</strong>
+    <input type="text" id="uiUserName" placeholder="Your name, Sir..." value="Braydon:)" />
 
+    <div id="uiChatLog">
+        @*<div id="uiNoMessagesAlert">
+            <h1>No recent messages :(</h1>
+        </div>*@
     </div>
 
-    <input type="text" id="uiUserName" placeholder="Your name, Sir..." value="Braydon:)" />
-    <br />
-    <input type="text" id="uiUserMessage" placeholder="Enter your message..." />
+    <div id="uiInputEditor"></div>
     <input type="button" id="uiSendMessage" value="Send!" />
 
 

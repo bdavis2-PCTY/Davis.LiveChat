@@ -1,4 +1,5 @@
-﻿using Davis.LiveChat.Logic.Core.Database;
+﻿using Davis.LiveChat.Exceptions;
+using Davis.LiveChat.Logic.Core.Database;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,12 @@ namespace Davis.LiveChat.Logic.Core.API
         /// <summary>
         /// The maximum minutes in the past recent messages will be pulled from
         /// </summary>
-        public const int MAX_RECENT_MESSAGE_MINUTES = 20;
+        public static readonly int MAX_RECENT_MESSAGE_MINUTES = 20;
+
+        /// <summary>
+        /// Maximum characters for a message
+        /// </summary>
+        public static readonly int MAX_MESSAGE_LENGTH = 5000;
 
         /// <summary>
         /// Saves a new message to the database
@@ -22,8 +28,16 @@ namespace Davis.LiveChat.Logic.Core.API
         {
             try
             {
-                // Encode the message (prevent HTML injection)
-                string Message = System.Web.HttpUtility.HtmlEncode(pMessageText);
+                string Message = pMessageText;
+                if (Message != null)
+                {
+                    Message = System.Web.HttpUtility.HtmlEncode(Message.Trim());
+                }
+
+                // Validate input
+                new UserAPI().ValidateUserName(pUserDisplayName);
+                ValidateMessage(Message);
+
 
                 using (LiveChatEntities DatabaseContext = new LiveChatEntities())
                 {
@@ -65,5 +79,28 @@ namespace Davis.LiveChat.Logic.Core.API
                 throw;
             }
         }
+
+        #region Helpers
+
+        /// <summary>
+        /// Validates a message meets requirements.
+        /// Throws an InvalidMessageException if it does not.
+        /// </summary>
+        /// <param name="pMessage"></param>
+        private void ValidateMessage(string pMessage)
+        {
+            if (string.IsNullOrWhiteSpace(pMessage))
+            {
+                throw new InvalidMessageException("A message must be entered");
+            }
+
+            if (pMessage.Length > MAX_MESSAGE_LENGTH)
+            {
+                throw new InvalidMessageException($"A message cannot exceed {MAX_MESSAGE_LENGTH} characters");
+            }
+        }
+
+        #endregion 
+
     }
 }

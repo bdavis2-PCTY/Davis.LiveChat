@@ -34,5 +34,4 @@ bld/
 Davis.LiveChat.Web/Content/LiveChat.js 
 Davis.LiveChat.Web/Content/Lib/Helpers.js 
 Davis.LiveChat.Web/Content/Lib/jQuery/jQuery.d.js 
-Davis.LiveChat.Web/WebService/*.js 
 Davis.LiveChat.Web/WebService/**/*.js 

@@ -2,6 +2,10 @@
 
 namespace Davis.LiveChat.Logic.Core.DTO
 {
+    /// <summary>
+    /// DTO object for chat messages
+    /// JS interface: LiveChat.WebService.DTO.Core.IChatMessage
+    /// </summary>
     public class ChatMessage
     {
         public DateTime SentDateTime { get; set; }

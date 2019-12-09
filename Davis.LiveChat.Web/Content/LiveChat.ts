@@ -3,7 +3,7 @@
         private readonly cooldownMs: number = 500;
 
         private $uiDisplayNameField: JQuery;
-        private $uiMessageField: JQuery;
+        private $uiMessageField: Quill.Quill;
         private $uiSendMessageBtn: JQuery;
         private $uiMessagesContainer: JQuery;
 
@@ -11,13 +11,38 @@
  
         public constructor() {
             this.$uiDisplayNameField = $("#uiUserName");
-            this.$uiMessageField = $("#uiUserMessage");
             this.$uiSendMessageBtn = $("#uiSendMessage");
             this.$uiMessagesContainer = $("#uiChatLog");
 
             this.$uiSendMessageBtn.on('click', () => this.onSendMessage());
 
             this.refreshMessages();
+
+            this.$uiMessageField = new Quill('#uiInputEditor', {
+                theme: 'snow',
+                modules:
+                {
+                    toolbar: [
+                        ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+                        ['blockquote', 'code-block'],
+
+                        [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                        [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+                        [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+                        [{ 'direction': 'rtl' }],                         // text direction
+
+                        [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+                        [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+                        [{ 'font': [] }],
+                        [{ 'align': [] }],
+
+                        ['clean']                                         // remove formatting button
+                    ]
+                }
+            });
         }
 
         private onSendMessage(): void {
@@ -31,7 +56,7 @@
 
             this.isSaving = true;
             LiveChat.WebService.Site.SaveMessageAsync(display, message).then(() => {
-                this.$uiMessageField.val("");
+                this.$uiMessageField.setText("");
             }).always(() => {
                 this.isSaving = false;
             });
@@ -42,7 +67,9 @@
         }
 
         private getMessageText(): string {
-            return this.$uiMessageField.val().trim();
+            console.log(this.$uiMessageField.getContents());
+
+            return this.$uiMessageField.getText().trim()
         }
 
         /**
